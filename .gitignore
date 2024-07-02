@@ -1,0 +1,9 @@
+.htaccess
+*.log
+*_log
+img
+img/*
+*.sh
+*.code-workspace
+.vscode
+.vscode/*
