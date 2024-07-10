@@ -22,22 +22,6 @@ $portadores = buscaPortador();
 
 </head>
 
-<style>
-    textarea {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    .ts-divTabela60 {
-        width: 100%;
-        height: 60vh;
-        overflow-y: scroll;
-        overflow-x: auto;
-    }
-</style>
-
 <body>
     <div class="container-fluid">
 
@@ -53,9 +37,13 @@ $portadores = buscaPortador();
                 <button class="btn btn-outline-secondary ts-btnFiltros" type="button"><i class="bi bi-funnel"></i></button>
             </div>
 
-            <div class="col-4 col-lg-3 order-lg-2" id="filtroh6">
+            <div class="col-2 col-lg-2 order-lg-2" id="filtroh6">
                 <h2 class="ts-tituloPrincipal">Contas à Receber</h2>
                 <h6 style="font-size: 10px;font-style:italic;text-align:left;"></h6>
+            </div>
+
+            <div class="col-2 col-lg-1 order-lg-3 pt-3">
+                <a class="btn btn-sm btn-primary" href="gerenciarrecebimentos.php" role="button">Recebimentos</a>
             </div>
 
             <div class="col-6 col-lg-2 order-lg-3">
@@ -158,7 +146,7 @@ $portadores = buscaPortador();
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Inserir Conta � Receber</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Inserir Conta à Receber</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body pt-0">
@@ -194,7 +182,7 @@ $portadores = buscaPortador();
                             <div class="row mt-2">
                                 <label class="form-label ts-label">Historico</label>
                                 <div class="col-md mt-3">
-                                    <textarea name="historico" rows="5"></textarea>
+                                    <textarea class="ts-textareaResponsivo" name="historico" rows="5"></textarea>
                                 </div>
                             </div><!--fim row-->
                             <div class="row mt-3">
@@ -288,7 +276,7 @@ $portadores = buscaPortador();
                             <div class="row mt-2">
                                 <label class="form-label ts-label">Historico</label>
                                 <div class="col-md mt-3">
-                                    <textarea name="historico" id="historico" rows="5"></textarea>
+                                    <textarea class="ts-textareaResponsivo" name="historico" id="historico" rows="5"></textarea>
                                 </div>
                             </div><!--fim row-->
                             <div class="row mt-3">

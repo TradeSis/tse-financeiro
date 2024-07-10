@@ -52,22 +52,8 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                         if ($nivelMenu == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
-                                <?php if ($tab == "gerenciarrecebimentos") {echo " active ";} ?>" 
-                                href="?tab=gerenciarrecebimentos" role="tab">Gerenciar Recebimentos</a>
-                            </li>
-                        <?php }
-                        if ($nivelMenu == 5) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
                                 <?php if ($tab == "contaspagar") {echo " active ";} ?>" 
                                 href="?tab=contaspagar" role="tab">Contas à Pagar</a>
-                            </li>
-                        <?php }
-                        if ($nivelMenu == 5) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "gerenciarpagamentos") {echo " active ";} ?>" 
-                                href="?tab=gerenciarpagamentos" role="tab">Gerenciar Pagamentos</a>
                             </li>
                         <?php }
                         if ($nivelMenu == 5) { ?>
@@ -99,14 +85,8 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=contasreceber"
                         <?php if ($getTab == "contasreceber") {echo " selected ";} ?>>Contas à Receber</option>
 
-                        <option value="<?php echo URLROOT ?>/financeiro/?tab=gerenciarrecebimentos"
-                        <?php if ($getTab == "gerenciarrecebimentos") {echo " selected ";} ?>>Gerenciar Recebimentos</option>
-
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=contaspagar" 
                         <?php if ($getTab == "contaspagar") {echo " selected ";} ?>>Contas à Pagar</option>
-
-                        <option value="<?php echo URLROOT ?>/financeiro/?tab=gerenciarpagamentos"
-                        <?php if ($getTab == "gerenciarpagamentos") {echo " selected ";} ?>>Gerenciar Pagamentos</option>
 
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=dashboard" 
                         <?php if ($getTab == "dashboard") {echo " selected ";} ?>>Dashboard</option>
@@ -129,17 +109,9 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                 $src = "consultas/contasreceber.php";
                 $title = "Financeiro/Contas à Receber";
             }
-            if ($tab == "gerenciarrecebimentos") {
-                $src = "consultas/gerenciarrecebimentos.php";
-                $title = "Financeiro/Gerenciar Recebimentos";
-            }
             if ($tab == "contaspagar") {
                 $src = "consultas/contaspagar.php";
                 $title = "Financeiro/Contas à Pagar";
-            }
-            if ($tab == "gerenciarpagamentos") {
-                $src = "consultas/gerenciarpagamentos.php";
-                $title = "Financeiro/Gerenciar Pagamentos";
             }
             if ($tab == "dashboard") {
                 $src = "consultas/dashboard.php";

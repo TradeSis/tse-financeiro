@@ -20,22 +20,6 @@ $portadores = buscaPortador();
 
 </head>
 
-<style>
-    textarea {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    .ts-divTabela60 {
-        width: 100%;
-        height: 60vh;
-        overflow-y: scroll;
-        overflow-x: auto;
-    }
-</style>
-
 <body>
     <div class="container-fluid">
 
@@ -51,12 +35,14 @@ $portadores = buscaPortador();
                 <button class="btn btn-outline-secondary ts-btnFiltros" type="button"><i class="bi bi-funnel"></i></button>
             </div>
 
-            <div class="col-4 col-lg-3 order-lg-2">
-
+            <div class="col-2 col-lg-2 order-lg-2">
                 <h2 class="ts-tituloPrincipal">Pagamentos</h2>
-                <a href="contaspagar.php">Contas à Pagar</a>
-
             </div>
+
+            <div class="col-2 col-lg-2 order-lg-2 mt-3">
+                <a class="btn btn-sm btn-primary" href="contaspagar.php" role="button">Contas à Pagar</a>
+            </div>
+
             <div class="col-6 col-lg-2 order-lg-3">
                 <!-- FLTROS -->
                 <select class="form-select ts-input mt-1 pt-1" name="idPortador" id="FiltroPortador">
@@ -78,7 +64,7 @@ $portadores = buscaPortador();
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#periodoModal"><i class="bi bi-calendar3"></i></button>
             </div>
 
-            <div class="col-11 col-lg-5 order-lg-5">
+            <div class="col-11 col-lg-4 order-lg-5">
                 <div class="input-group">
                     <input type="text" class="form-control ts-input" id="buscarCpPagamento" placeholder="Buscar por historico">
                     <button class="btn btn-primary rounded" type="button" id="buscar"><i class="bi bi-search"></i></button>
