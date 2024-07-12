@@ -46,7 +46,15 @@ if (isset($_GET['operacao'])) {
 			'idPortador' => $_POST['idPortador'],
 			'idCategoria' => $_POST['idCategoria']
 		);
-		$contas = chamaAPI(null, '/financeiro/contaspagar', json_encode($apiEntrada), 'PUT');
+		if(isset($_POST['ocorrencia']) && ($_POST['ocorrencia'] == 'recorrente')){
+			$apiEntrada += array(
+				'vencimento' => $_POST['vencimento'],
+				'parcelas' => $_POST['parcelas']
+			);	
+			$contas = chamaAPI(null, '/financeiro/contaspagar_clonar', json_encode($apiEntrada), 'PUT');
+		}else{
+			$contas = chamaAPI(null, '/financeiro/contaspagar', json_encode($apiEntrada), 'PUT');
+		}
 
 	}
 

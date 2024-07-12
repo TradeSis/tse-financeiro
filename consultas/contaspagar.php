@@ -11,6 +11,7 @@ include_once(__DIR__ . '/../database/portador.php');
 $pessoas = buscarPessoa();
 $contacategorias = buscaContaCategoria(null, "CP");
 $portadores = buscaPortador();
+
 ?>
 
 <!doctype html>
@@ -39,7 +40,6 @@ $portadores = buscaPortador();
 
             <div class="col-2 col-lg-2 order-lg-2" id="filtroh6">
                 <h2 class="ts-tituloPrincipal">Contas à Pagar</h2>
-                
                 <h6 style="font-size: 10px;font-style:italic;text-align:left;"></h6>
             </div>
 
@@ -216,6 +216,27 @@ $portadores = buscaPortador();
                                     <input type="text" class="form-control ts-input formatValorDecimal" name="valorOriginal" required>
                                 </div>
                             </div><!--fim row-->
+                            <div class="row mt-3">
+                                <div class="col-4">
+                                    <label class="form-label ts-label">Ocorrencia</label>
+                                    <select class="form-select ts-input" name="ocorrencia" id="inserir_selectOcorrencia">
+                                        <option value="unica">Unica</option>
+                                        <option value="recorrente">Recorrente</option>
+                                    </select>
+                                </div>
+                                <div class="col-4 inserir_divOcorrencia d-none">
+                                    <div class="col-md">
+                                        <label class="form-label ts-label">Dia de vencimento</label>
+                                        <input type="number" class="form-control ts-input" name="vencimento" id="clonar_vencimento">
+                                    </div>
+                                </div>
+                                <div class="col-4 inserir_divOcorrencia d-none">
+                                    <div class="col-md">
+                                        <label class="form-label ts-label">Parcelas</label>
+                                        <input type="number" class="form-control ts-input" name="parcelas">
+                                    </div>
+                                </div>
+                            </div>
                     </div><!--body-->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Cadastrar</button>
@@ -232,7 +253,7 @@ $portadores = buscaPortador();
                     <div class="modal-header">
                         <div class="col align-self-start pl-0">
                             <div class="col-md">
-                                <h5 class="modal-title">Alterar Conta � Pagar</h5>
+                                <h5 class="modal-title">Alterar Conta à Pagar</h5>
                             </div>
                             <div class="col-md">
                                 <h7 class="modal-title" id="textoalterarsituacao"></h7>
@@ -449,523 +470,693 @@ $portadores = buscaPortador();
         <!--------- EXCLUIR CONTAS PAGAR PAGAMENTO --------->
         <?php include_once 'excluirpagamentos_modal.php' ?>
 
-        <!-- LOCAL PARA COLOCAR OS JS -->
+        <!-- CLONAR -->
+        <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 id="tituloClonar"></h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body mt-0 pt-0">
+                <form method="post" id="inserirFormContasPagarClonar">
+                    <div class="row">
+                        <div class="col-md">
+                            <label class="form-label ts-label">Fornecedor</label>
+                            <select class="form-select ts-input" name="idPessoaFornecedor" id="clonar_idPessoaFornecedor" autocomplete="off" required>
+                                <?php
+                                foreach ($pessoas as $pessoa) {
+                                ?>
+                                    <option value="<?php echo $pessoa['idPessoa'] ?>">
+                                        <?php echo $pessoa['nomeFantasia'] ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div><!--fim row-->
+                    <div class="row mt-2">
+                        <div class="col-md">
+                            <label class="form-label ts-label">dtCompetencia *</label>
+                            <input type="date" class="form-control ts-input" name="dtCompetencia" id="clonar_dtCompetencia" required>
+                        </div>
+                        <div class="col-md">
+                            <label class="form-label ts-label">dtVencimento *</label>
+                            <input type="date" class="form-control ts-input" name="dtVencimento" id="clonar_dtVencimento" required>
+                        </div>
+                        <div class="col-md">
+                            <label class="form-label ts-label">documento</label>
+                            <input type="text" class="form-control ts-input" name="documento" id="clonar_documento">
+                        </div>
+                    </div><!--fim row-->
+                    <div class="row mt-2">
+                        <label class="form-label ts-label">Historico</label>
+                        <div class="col-md mt-3">
+                            <textarea class="ts-textareaResponsivo" name="historico" id="clonar_historico" rows="5"></textarea>
+                        </div>
+                    </div><!--fim row-->
+                    <div class="row mt-3">
+                        <div class="col-md">
+                            <label class="form-label ts-label">Categoria</label>
+                            <select class="form-select ts-input" name="idCategoria" id="clonar_idCategoria" required>
+                                <?php
+                                foreach ($contacategorias as $contacategoria) {
+                                ?>
+                                    <option value="<?php echo $contacategoria['idCategoria'] ?>">
+                                        <?php echo $contacategoria['nomeCategoria'] ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label class="form-label ts-label">Portador</label>
+                            <select class="form-select ts-input" name="idPortador" id="clonar_idPortador" required>
+                                <?php
+                                foreach ($portadores as $portador) {
+                                ?>
+                                    <option value="<?php echo $portador['idPortador'] ?>">
+                                        <?php echo $portador['nomePortador'] ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label class="form-label ts-label">valorOriginal</label>
+                            <input type="text" class="form-control ts-input formatValorDecimal" name="valorOriginal" id="clonar_valorOriginal" required>
+                        </div>
+                    </div><!--fim row-->
 
-        <?php include_once ROOT . "/vendor/footer_js.php"; ?>
+                    <div class="row mt-3">
+                        <div class="col-4">
+                            <label class="form-label ts-label">Ocorrencia</label>
+                            <select class="form-select ts-input" name="ocorrencia" id="clonar_selectOcorrencia">
+                                <option value="unica">Unica</option>
+                                <option value="recorrente">Recorrente</option>
+                            </select>
+                        </div>
+                        <div class="col-4 clonar_divOcorrencia d-none">
+                            <div class="col-md">
+                                <label class="form-label ts-label">Dia de vencimento</label>
+                                <input type="number" class="form-control ts-input" name="vencimento" id="clonar_vencimento">
+                            </div>
+                        </div>
+                        <div class="col-4 clonar_divOcorrencia d-none">
+                            <div class="col-md">
+                                <label class="form-label ts-label">Parcelas</label>
+                                <input type="number" class="form-control ts-input" name="parcelas">
+                            </div>
+                        </div>
+                    </div>
+            </div><!--body-->
+            <hr>
+            <div class="offcanvas-footer text-end">
+                <button type="submit" class="btn btn-success">Cadastrar</button>
+            </div>
+            </form>
+        </div>
 
-        <!-- script para menu de filtros -->
-        <script src="<?php echo URLROOT ?>/sistema/js/filtroTabela.js"></script>
+    </div>
 
-        <script>
-            buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), $("#FiltroPeriodoInicio").val(), $("#FiltroPeriodoFim").val());
+    <!-- LOCAL PARA COLOCAR OS JS -->
 
-            function limpar() {
-                window.location.reload();
+    <?php include_once ROOT . "/vendor/footer_js.php"; ?>
+
+    <!-- script para menu de filtros -->
+    <script src="<?php echo URLROOT ?>/sistema/js/filtroTabela.js"></script>
+
+    <script>
+        buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), $("#FiltroPeriodoInicio").val(), $("#FiltroPeriodoFim").val());
+
+        function limpar() {
+            window.location.reload();
+        }
+
+        function limparPeriodo() {
+            window.location.reload();
+        }
+
+        function buscar(buscaContasPagar, idCategoria, idPortador, filtrosituacao, PeriodoInicio, PeriodoFim) {
+            var h6Element = $("#filtroh6 h6");
+            var text = "";
+            if (filtrosituacao === "emaberto") {
+                if (text) text += ", ";
+                text += "Status = Em aberto";
+            } else if (filtrosituacao === "emitida") {
+                if (text) text += ", ";
+                text += "Status = Emitida";
+            } else if (filtrosituacao === "pagas") {
+                if (text) text += ", ";
+                text += "Status = Pagas";
             }
 
-            function limparPeriodo() {
-                window.location.reload();
+            if (PeriodoInicio !== "") {
+                text += PeriodoInicio !== null ? " em " + formatDate(PeriodoInicio) : " ";
+
             }
 
-            function buscar(buscaContasPagar, idCategoria, idPortador, filtrosituacao, PeriodoInicio, PeriodoFim) {
-                var h6Element = $("#filtroh6 h6");
-                var text = "";
-                if (filtrosituacao === "emaberto") {
-                    if (text) text += ", ";
-                    text += "Status = Em aberto";
-                } else if (filtrosituacao === "emitida") {
-                    if (text) text += ", ";
-                    text += "Status = Emitida";
-                } else if (filtrosituacao === "pagas") {
-                    if (text) text += ", ";
-                    text += "Status = Pagas";
-                }
+            if (PeriodoFim !== "") {
+                text += PeriodoFim !== null ? " até " + formatDate(PeriodoFim) : " ";
+            }
 
-                if (PeriodoInicio !== "") {
-                    text += PeriodoInicio !== null ? " em " + formatDate(PeriodoInicio) : " ";
+            h6Element.html(text);
 
-                }
+            $.ajax({
+                type: 'POST',
+                dataType: 'html',
+                url: '<?php echo URLROOT ?>/financeiro/database/contaspagar.php?operacao=filtrar',
+                beforeSend: function() {
+                    $("#dados").html("Carregando...");
+                },
+                data: {
+                    buscar: buscaContasPagar,
+                    buscaCategoria: idCategoria,
+                    buscaPortador: idPortador,
+                    filtrosituacao: filtrosituacao,
+                    PeriodoInicio: PeriodoInicio,
+                    PeriodoFim: PeriodoFim
+                },
+                success: function(msg) {
 
-                if (PeriodoFim !== "") {
-                    text += PeriodoFim !== null ? " até " + formatDate(PeriodoFim) : " ";
-                }
+                    var json = JSON.parse(msg);
+                    var linha = "";
+                    for (var $i = 0; $i < json.length; $i++) {
+                        var object = json[$i];
 
-                h6Element.html(text);
+                        var dataCompetenciaFormatada = formatDate(object.dtCompetencia);
+                        var dataVencimentoFormatada = formatDate(object.dtVencimento);
+                        var dataLiquidacaoFormatada = formatDate(object.dtLiquidacao);
 
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'html',
-                    url: '<?php echo URLROOT ?>/financeiro/database/contaspagar.php?operacao=filtrar',
-                    beforeSend: function() {
-                        $("#dados").html("Carregando...");
-                    },
-                    data: {
-                        buscar: buscaContasPagar,
-                        buscaCategoria: idCategoria,
-                        buscaPortador: idPortador,
-                        filtrosituacao: filtrosituacao,
-                        PeriodoInicio: PeriodoInicio,
-                        PeriodoFim: PeriodoFim
-                    },
-                    success: function(msg) {
-
-                        var json = JSON.parse(msg);
-                        var linha = "";
-                        for (var $i = 0; $i < json.length; $i++) {
-                            var object = json[$i];
-
-                            var dataCompetenciaFormatada = formatDate(object.dtCompetencia);
-                            var dataVencimentoFormatada = formatDate(object.dtVencimento);
-                            var dataLiquidacaoFormatada = formatDate(object.dtLiquidacao);
-
-                            vValor = object.valorOriginal;
-                            if (object.saldo != 0) {
-                                vValor = object.saldo
-                            }
-
-                            linha += "<tr>";
-
-                            linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.nomePessoa + "</td>";
-                            linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.historico + "</td>";
-                            linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.documento + "</td>";
-                            linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + dataCompetenciaFormatada + "</td>";
-                            linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.nomeCategoria + "</td>";
-                            linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.nomePortador + "</td>";
-                            linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + dataVencimentoFormatada + "</td>";
-                            linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + dataLiquidacaoFormatada + "</td>";
-                            linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + (vValor !== null ? vValor.toLocaleString('pt-br', {
-                                minimumFractionDigits: 2
-                            }) : "-") + "</td>";
-                            linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.situacao + "</td>";
-                            linha += "<td>";
-                            linha += "<div class='btn-group dropstart'><button type='button' class='btn' data-toggle='tooltip' data-placement='left' title='Opções' data-bs-toggle='dropdown' " +
-                                " aria-expanded='false' style='box-shadow:none'><i class='bi bi-three-dots-vertical'></i></button><ul class='dropdown-menu'>";
-
-                            linha += "<li class='ms-1 me-1 mt-1'><a class='btn btn-primary btn-sm w-100 text-start' data-toggle='modal' data-target='#baixarpagamentomodal' data-idCP='" + object.idCP + "' role='button'><i class='bi bi-pencil-square'></i> Baixar</a></li>";
-                            if (object.situacao != 'Aberto') {
-                                linha += "<li class='ms-1 me-1 mt-1'><a class='btn btn-primary btn-sm w-100 text-start' data-toggle='modal' data-target='#gerenciarpagamentomodal' data-idCP='" + object.idCP + "' role='button'><i class='bi bi-pencil-square'></i> Gerenciar</a></li>";
-                            }
-                            linha += "<li ><hr class='mt-2 mb-1'></li>";
-                            if (object.situacao != 'Parcial') {
-                                linha += "<li class='ms-1 me-1 mt-1'><a class='btn btn-danger btn-sm w-100 text-start' data-toggle='modal' data-target='#excluirContasPagarmodal' data-idCP='" + object.idCP + "' role='button'><i class='bi bi-trash3'></i> Excluir</a></li>";
-                            }
-                            linha += "</tr></ul></div>"
-                            linha += "</td>";
-
-                            linha += "</tr>";
+                        vValor = object.valorOriginal;
+                        if (object.saldo != 0) {
+                            vValor = object.saldo
                         }
 
-                        $("#dados").html(linha);
+                        linha += "<tr>";
 
+                        linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.nomePessoa + "</td>";
+                        linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.historico + "</td>";
+                        linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.documento + "</td>";
+                        linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + dataCompetenciaFormatada + "</td>";
+                        linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.nomeCategoria + "</td>";
+                        linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.nomePortador + "</td>";
+                        linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + dataVencimentoFormatada + "</td>";
+                        linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + dataLiquidacaoFormatada + "</td>";
+                        linha += "<td class='ts-click' data-idCP='" + object.idCP + "'>" + (vValor !== null ? vValor.toLocaleString('pt-br', {
+                            minimumFractionDigits: 2
+                        }) : "-") + "</td>";
+                        linha += "<td class='text-start ts-click' data-idCP='" + object.idCP + "'>" + object.situacao + "</td>";
+                        linha += "<td>";
+                        linha += "<div class='btn-group dropstart'><button type='button' class='btn' data-toggle='tooltip' data-placement='left' title='Opções' data-bs-toggle='dropdown' " +
+                            " aria-expanded='false' style='box-shadow:none'><i class='bi bi-three-dots-vertical'></i></button><ul class='dropdown-menu'>";
+
+                        linha += "<li class='ms-1 me-1 mt-1'><a class='btn btn-primary btn-sm w-100 text-start' data-toggle='modal' data-target='#baixarpagamentomodal' data-idCP='" + object.idCP + "' role='button'><i class='bi bi-check-lg'></i> Baixar</a></li>";
+                        linha += "<li class='ms-1 me-1 mt-1'><button class='btn btn-primary btn-sm w-100 text-start clonarButton' type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasRight' aria-controls='offcanvasRight' data-idCP='" + object.idCP + "'><i class='bi bi-copy'></i> Clonar</button></li>";
+                        if (object.situacao != 'Aberto') {
+                            linha += "<li class='ms-1 me-1 mt-1'><a class='btn btn-primary btn-sm w-100 text-start' data-toggle='modal' data-target='#gerenciarpagamentomodal' data-idCP='" + object.idCP + "' role='button'><i class='bi bi-clipboard-pulse'></i> Gerenciar</a></li>";
+                        }
+                        linha += "<li ><hr class='mt-2 mb-1'></li>";
+                        if (object.situacao != 'Parcial') {
+                            linha += "<li class='ms-1 me-1 mt-1'><a class='btn btn-danger btn-sm w-100 text-start' data-toggle='modal' data-target='#excluirContasPagarmodal' data-idCP='" + object.idCP + "' role='button'><i class='bi bi-trash3'></i> Excluir</a></li>";
+                        }
+                        linha += "</tr></ul></div>"
+                        linha += "</td>";
+
+                        linha += "</tr>";
                     }
-                });
-            }
 
-            $("#buscar").click(function() {
+                    $("#dados").html(linha);
+
+                }
+            });
+        }
+
+        $("#buscar").click(function() {
+            buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
+        });
+
+        $("#FiltroCategoria").change(function() {
+            vfiltrosituacao = $("#FiltroSituacao").val();
+            datainiciomes = $("#datainiciomes").val()
+            dataatualmes = $("#dataatualmes").val();
+            if (vfiltrosituacao != "emaberto") {
+                buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), datainiciomes, dataatualmes);
+            } else {
                 buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
-            });
+            }
+        });
 
-            $("#FiltroCategoria").change(function() {
-                vfiltrosituacao = $("#FiltroSituacao").val();
-                datainiciomes = $("#datainiciomes").val()
-                dataatualmes = $("#dataatualmes").val();
-                if (vfiltrosituacao != "emaberto") {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), datainiciomes, dataatualmes);
-                } else {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
-                }
-            });
+        $("#FiltroPortador").change(function() {
+            vfiltrosituacao = $("#FiltroSituacao").val();
+            datainiciomes = $("#datainiciomes").val()
+            dataatualmes = $("#dataatualmes").val();
+            if (vfiltrosituacao != "emaberto") {
+                buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), datainiciomes, dataatualmes);
+            } else {
+                buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
+            }
+        });
 
-            $("#FiltroPortador").change(function() {
-                vfiltrosituacao = $("#FiltroSituacao").val();
-                datainiciomes = $("#datainiciomes").val()
-                dataatualmes = $("#dataatualmes").val();
-                if (vfiltrosituacao != "emaberto") {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), datainiciomes, dataatualmes);
-                } else {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
-                }
-            });
+        $("#FiltroSituacao").change(function() {
+            vfiltrosituacao = $("#FiltroSituacao").val();
+            datainiciomes = $("#datainiciomes").val()
+            dataatualmes = $("#dataatualmes").val();
+            if (vfiltrosituacao != "emaberto") {
+                buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), datainiciomes, dataatualmes);
+            } else {
+                buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
+            }
+        });
 
-            $("#FiltroSituacao").change(function() {
-                vfiltrosituacao = $("#FiltroSituacao").val();
-                datainiciomes = $("#datainiciomes").val()
-                dataatualmes = $("#dataatualmes").val();
-                if (vfiltrosituacao != "emaberto") {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), datainiciomes, dataatualmes);
-                } else {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), null, null);
-                }
-            });
+        $("#filtrarButton").click(function() {
+            buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), $("#FiltroPeriodoInicio").val(), $("#FiltroPeriodoFim").val());
+            $('#periodoModal').modal('hide');
+        });
 
-            $("#filtrarButton").click(function() {
+        document.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
                 buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), $("#FiltroPeriodoInicio").val(), $("#FiltroPeriodoFim").val());
-                $('#periodoModal').modal('hide');
-            });
+            }
+        });
 
-            document.addEventListener("keypress", function(e) {
-                if (e.key === "Enter") {
-                    buscar($("#buscaContasPagar").val(), $("#FiltroCategoria").val(), $("#FiltroPortador").val(), $("#FiltroSituacao").val(), $("#FiltroPeriodoInicio").val(), $("#FiltroPeriodoFim").val());
+        $("#inserir_selectOcorrencia").change(function() {
+
+            ocorrencia = $("#inserir_selectOcorrencia").val();
+            if (ocorrencia == 'recorrente') {
+                $('.inserir_divOcorrencia').removeClass('d-none');
+            } else {
+                $('.inserir_divOcorrencia').addClass('d-none');
+            }
+        });
+
+        $("#clonar_selectOcorrencia").change(function() {
+
+            ocorrencia = $("#clonar_selectOcorrencia").val();
+            if (ocorrencia == 'recorrente') {
+                $('.clonar_divOcorrencia').removeClass('d-none');
+            } else {
+                $('.clonar_divOcorrencia').addClass('d-none');
+            }
+        });
+
+        //MODAL ALTERAR
+        $(document).on('click', '.ts-click', function() {
+            var idCP = $(this).attr("data-idCP");
+            //alert(idCP)
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '<?php echo URLROOT ?>/financeiro/database/contaspagar.php?operacao=buscar',
+                data: {
+                    idCP: idCP
+                },
+                success: function(data) {
+                    //console.log(JSON.stringify(data, null, 2));
+                    $('#idCP').val(data.idCP);
+                    $('#idPessoaFornecedor').val(data.idPessoaFornecedor);
+                    $('#nomePessoa').val(data.nomePessoa);
+                    $('#dtCompetencia').val(data.dtCompetencia);
+                    $('#dtVencimento').val(data.dtVencimento);
+                    $('#documento').val(data.documento);
+                    $('#historico').val(data.historico);
+                    $('#valorOriginal').val(data.valorOriginal !== null ? data.valorOriginal.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2
+                    }) : "-");
+                    $('#situacao').val(data.situacao);
+                    $('#idPortador').val(data.idPortador);
+                    $('#idCategoria').val(data.idCategoria);
+                    $('#dtLiquidacao').val(data.dtLiquidacao);
+
+                    vsituacao = 'Aberto';
+                    //situacao Parcial
+                    if (data.dtLiquidacao == null && data.saldo != 0) {
+                        vsituacao = 'Parcial';
+                        $('#idPessoaFornecedor').addClass('ts-displayDisable');
+                        $('#valorOriginal').prop('readonly', true);
+                    } else {
+                        $('#idPessoaFornecedor').removeClass('ts-displayDisable');
+                        $('#valorOriginal').prop('readonly', false);
+                    }
+
+                    //situacao Liquidado
+                    if (data.dtLiquidacao != null && data.saldo == 0) {
+                        vsituacao = 'Liquidado';
+                        $('#btn-salvarAlteracao').hide();
+                    } else {
+                        $('#btn-salvarAlteracao').show();
+                    }
+
+                    //texto valorOriginal
+                    var texto = $("#textoalterarsituacao");
+                    texto.html('Situacao: ' + vsituacao);
+
+                    //texto saldo
+                    vsaldo = (data.saldo !== null ? data.saldo.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2
+                    }) : "-");
+                    var texto = $("#textoalterarsaldo");
+                    texto.html('Saldo: ' + vsaldo);
+
+                    $('#alterarmodal').modal('show');
                 }
             });
+        });
 
-            //MODAL ALTERAR
-            $(document).on('click', '.ts-click', function() {
-                var idCP = $(this).attr("data-idCP");
-                //alert(idCP)
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: '<?php echo URLROOT ?>/financeiro/database/contaspagar.php?operacao=buscar',
-                    data: {
-                        idCP: idCP
-                    },
-                    success: function(data) {
-                        //console.log(JSON.stringify(data, null, 2));
-                        $('#idCP').val(data.idCP);
-                        $('#idPessoaFornecedor').val(data.idPessoaFornecedor);
-                        $('#nomePessoa').val(data.nomePessoa);
-                        $('#dtCompetencia').val(data.dtCompetencia);
-                        $('#dtVencimento').val(data.dtVencimento);
-                        $('#documento').val(data.documento);
-                        $('#historico').val(data.historico);
-                        $('#valorOriginal').val(data.valorOriginal !== null ? data.valorOriginal.toLocaleString('pt-br', {
+        //MODAL BAIXARPAGAMENTO
+        $(document).on('click', 'a[data-target="#baixarpagamentomodal"]', function() {
+            var idCP = $(this).attr("data-idCP");
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '<?php echo URLROOT ?>/financeiro/database/contaspagar.php?operacao=buscar',
+                data: {
+                    idCP: idCP
+                },
+                success: function(data) {
+                    console.log(JSON.stringify(data, null, 2));
+                    $('#bp_idCP').val(data.idCP);
+                    $('#bp_historico').val(data.historico);
+                    $('#bp_idPortador').val(data.idPortador);
+                    $('#bp_idCategoria').val(data.idCategoria);
+                    $('#bp_valorOriginal').val(data.valorOriginal !== null ? data.valorOriginal.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2
+                    }) : "-");
+                    $('#bp_nomePessoa').val(data.nomePessoa);
+
+                    //titulo modal baixarpagamento
+                    var titulo = $("#titulomodalbaixarpagamento");
+                    titulo.html('Pagamento documento: ' + data.documento);
+
+                    if (data.saldo == 0) {
+                        $('#bp_valorPagoPagamento').val(data.valorOriginal !== null ? data.valorOriginal.toLocaleString('pt-br', {
                             minimumFractionDigits: 2
                         }) : "-");
-                        $('#situacao').val(data.situacao);
-                        $('#idPortador').val(data.idPortador);
-                        $('#idCategoria').val(data.idCategoria);
-                        $('#dtLiquidacao').val(data.dtLiquidacao);
+                    } else {
+                        $('#bp_valorPagoPagamento').val(data.saldo !== null ? data.saldo.toLocaleString('pt-br', {
+                            minimumFractionDigits: 2
+                        }) : "-");
+                    }
 
-                        vsituacao = 'Aberto';
+                    var valorOriginal = data.valorOriginal;
+                    $('#bp_saldo').val(data.saldo !== null ? data.saldo.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2
+                    }) : "-");
+                    $('#bp_valorPago').val(data.valorPago !== null ? data.valorPago.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2
+                    }) : "-");
+                    var valorPago = data.valorPago;
+
+                    if (valorOriginal == valorPago) {
+                        $('#bp_valorPagoPagamento').prop('readonly', true);
+                        $('#btnSalvarPagamento').hide();
+
+                    } else {
+                        $('#bp_valorPagoPagamento').prop('readonly', false);
+                        $('#btnSalvarPagamento').show();
+                    }
+
+                    $('#baixarpagamentomodal').modal('show');
+                }
+            });
+        });
+
+        //MODAL GERENCIAR PAGAMENTO
+        $(document).on('click', 'a[data-target="#gerenciarpagamentomodal"]', function() {
+            var idCP = $(this).attr("data-idCP");
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '<?php echo URLROOT ?>/financeiro/database/contaspagarpagamento.php?operacao=buscarContasPagar',
+                data: {
+                    idCP: idCP
+                },
+                success: function(data) {
+                    //console.log(JSON.stringify(data, null, 2));
+                    var linha = "";
+                    for (var $i = 0; $i < data.length; $i++) {
+                        var object = data[$i];
+
+                        //titulo modal gerenciar
+                        var titulo = $("#titulomodalgerenciar");
+                        titulo.html('Gerenciar Pagamento: ' + object.documento);
+
+                        //texto valorOriginal
+                        vvalorOriginal = (object.valorOriginal !== null ? object.valorOriginal.toLocaleString('pt-br', {
+                            minimumFractionDigits: 2
+                        }) : "-")
+                        var texto = $("#textovalorOriginal");
+                        texto.html('Valor: ' + vvalorOriginal);
+
+                        //texto saldo
+                        vsaldo = (object.saldo !== null ? object.saldo.toLocaleString('pt-br', {
+                            minimumFractionDigits: 2
+                        }) : "-");
+                        var texto = $("#textosaldo");
+                        texto.html('Saldo: ' + vsaldo);
+
+                        situacao = '';
                         //situacao Parcial
-                        if (data.dtLiquidacao == null && data.saldo != 0) {
-                            vsituacao = 'Parcial';
-                            $('#idPessoaFornecedor').addClass('ts-displayDisable');
-                            $('#valorOriginal').prop('readonly', true);
-                        } else {
-                            $('#idPessoaFornecedor').removeClass('ts-displayDisable');
-                            $('#valorOriginal').prop('readonly', false);
+                        if (object.saldo != 0) {
+                            situacao = 'Parcial'
                         }
 
                         //situacao Liquidado
-                        if (data.dtLiquidacao != null && data.saldo == 0) {
-                            vsituacao = 'Liquidado';
-                            $('#btn-salvarAlteracao').hide();
-                        } else {
-                            $('#btn-salvarAlteracao').show();
+                        if (object.saldo == 0) {
+                            situacao = 'Liquidado'
                         }
+                        var texto = $("#textoGRsituacao");
+                        texto.html('Situacao: ' + situacao);
 
-                        //texto valorOriginal
-                        var texto = $("#textoalterarsituacao");
-                        texto.html('Situacao: ' + vsituacao);
+                        var dataPagamentoFormatada = formatDate(object.dtPagamento);
 
-                        //texto saldo
-                        vsaldo = (data.saldo !== null ? data.saldo.toLocaleString('pt-br', {
+                        linha += "<tr>";
+                        linha += "<td class='text-start'>" + object.nomePessoa + "</td>";
+                        linha += "<td>" + dataPagamentoFormatada + "</td>";
+                        linha += "<td class='text-start'>" + object.historico + "</td>";
+                        linha += "<td class='text-start'>" + object.nomeCategoria + "</td>";
+                        linha += "<td class='text-start'>" + object.nomePortador + "</td>";
+                        linha += "<td class='text-end'>" + object.acrescimos + "</td>";
+                        linha += "<td class='text-end'>" + object.descontos + "</td>";
+                        linha += "<td class='text-end'>" + (object.valorPago !== null ? object.valorPago.toLocaleString('pt-br', {
                             minimumFractionDigits: 2
-                        }) : "-");
-                        var texto = $("#textoalterarsaldo");
-                        texto.html('Saldo: ' + vsaldo);
-
-                        $('#alterarmodal').modal('show');
+                        }) : "-") + "</td>";
+                        linha += "<td>" + "<button type='button' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#excluirCpPagamentomodal' data-idCP='" + object.idCP + "' data-idCpPgto='" + object.idCpPgto + "'><i class='bi bi-trash3'></i></button>"
+                        linha += "</tr>";
                     }
-                });
-            });
 
-            //MODAL BAIXARPAGAMENTO
-            $(document).on('click', 'a[data-target="#baixarpagamentomodal"]', function() {
-                var idCP = $(this).attr("data-idCP");
-
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: '<?php echo URLROOT ?>/financeiro/database/contaspagar.php?operacao=buscar',
-                    data: {
-                        idCP: idCP
-                    },
-                    success: function(data) {
-                        console.log(JSON.stringify(data, null, 2));
-                        $('#bp_idCP').val(data.idCP);
-                        $('#bp_historico').val(data.historico);
-                        $('#bp_idPortador').val(data.idPortador);
-                        $('#bp_idCategoria').val(data.idCategoria);
-                        $('#bp_valorOriginal').val(data.valorOriginal !== null ? data.valorOriginal.toLocaleString('pt-br', {
-                            minimumFractionDigits: 2
-                        }) : "-");
-                        $('#bp_nomePessoa').val(data.nomePessoa);
-
-                        //titulo modal baixarpagamento
-                        var titulo = $("#titulomodalbaixarpagamento");
-                        titulo.html('Pagamento documento: ' + data.documento);
-
-                        if (data.saldo == 0) {
-                            $('#bp_valorPagoPagamento').val(data.valorOriginal !== null ? data.valorOriginal.toLocaleString('pt-br', {
-                                minimumFractionDigits: 2
-                            }) : "-");
-                        } else {
-                            $('#bp_valorPagoPagamento').val(data.saldo !== null ? data.saldo.toLocaleString('pt-br', {
-                                minimumFractionDigits: 2
-                            }) : "-");
-                        }
-
-                        var valorOriginal = data.valorOriginal;
-                        $('#bp_saldo').val(data.saldo !== null ? data.saldo.toLocaleString('pt-br', {
-                            minimumFractionDigits: 2
-                        }) : "-");
-                        $('#bp_valorPago').val(data.valorPago !== null ? data.valorPago.toLocaleString('pt-br', {
-                            minimumFractionDigits: 2
-                        }) : "-");
-                        var valorPago = data.valorPago;
-
-                        if (valorOriginal == valorPago) {
-                            $('#bp_valorPagoPagamento').prop('readonly', true);
-                            $('#btnSalvarPagamento').hide();
-
-                        } else {
-                            $('#bp_valorPagoPagamento').prop('readonly', false);
-                            $('#btnSalvarPagamento').show();
-                        }
-
-                        $('#baixarpagamentomodal').modal('show');
-                    }
-                });
-            });
-
-            //MODAL GERENCIAR PAGAMENTO
-            $(document).on('click', 'a[data-target="#gerenciarpagamentomodal"]', function() {
-                var idCP = $(this).attr("data-idCP");
-
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: '<?php echo URLROOT ?>/financeiro/database/contaspagarpagamento.php?operacao=buscarContasPagar',
-                    data: {
-                        idCP: idCP
-                    },
-                    success: function(data) {
-                        //console.log(JSON.stringify(data, null, 2));
-                        var linha = "";
-                        for (var $i = 0; $i < data.length; $i++) {
-                            var object = data[$i];
-
-                            //titulo modal gerenciar
-                            var titulo = $("#titulomodalgerenciar");
-                            titulo.html('Gerenciar Pagamento: ' + object.documento);
-
-                            //texto valorOriginal
-                            vvalorOriginal = (object.valorOriginal !== null ? object.valorOriginal.toLocaleString('pt-br', {
-                                minimumFractionDigits: 2
-                            }) : "-")
-                            var texto = $("#textovalorOriginal");
-                            texto.html('Valor: ' + vvalorOriginal);
-
-                            //texto saldo
-                            vsaldo = (object.saldo !== null ? object.saldo.toLocaleString('pt-br', {
-                                minimumFractionDigits: 2
-                            }) : "-");
-                            var texto = $("#textosaldo");
-                            texto.html('Saldo: ' + vsaldo);
-
-                            situacao = '';
-                            //situacao Parcial
-                            if (object.saldo != 0) {
-                                situacao = 'Parcial'
-                            }
-
-                            //situacao Liquidado
-                            if (object.saldo == 0) {
-                                situacao = 'Liquidado'
-                            }
-                            var texto = $("#textoGRsituacao");
-                            texto.html('Situacao: ' + situacao);
-
-                            var dataPagamentoFormatada = formatDate(object.dtPagamento);
-
-                            linha += "<tr>";
-                            linha += "<td class='text-start'>" + object.nomePessoa + "</td>";
-                            linha += "<td>" + dataPagamentoFormatada + "</td>";
-                            linha += "<td class='text-start'>" + object.historico + "</td>";
-                            linha += "<td class='text-start'>" + object.nomeCategoria + "</td>";
-                            linha += "<td class='text-start'>" + object.nomePortador + "</td>";
-                            linha += "<td class='text-end'>" + object.acrescimos + "</td>";
-                            linha += "<td class='text-end'>" + object.descontos + "</td>";
-                            linha += "<td class='text-end'>" + (object.valorPago !== null ? object.valorPago.toLocaleString('pt-br', {
-                                minimumFractionDigits: 2
-                            }) : "-") + "</td>";
-                            linha += "<td>" + "<button type='button' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#excluirCpPagamentomodal' data-idCP='" + object.idCP + "' data-idCpPgto='" + object.idCpPgto + "'><i class='bi bi-trash3'></i></button>"
-                            linha += "</tr>";
-                        }
-
-                        $("#dados_gerenciarPagamento").html(linha);
-                        $('#gerenciarpagamentomodal').modal('show')
-                    }
-                });
-            });
-
-            //MODAL EXCLUIR CONTAS PAGAR
-            $(document).on('click', 'a[data-target="#excluirContasPagarmodal"]', function() {
-                var idCP = $(this).attr("data-idCP");
-
-                $('#excluirContasPagar_idCP').val(idCP);
-
-                $('#excluirContasPagarmodal').modal('show');
-            });
-
-            //MODAL EXCLUIR CONTAS PAGAR PAGAMENTO
-            $(document).on('click', 'button[data-target="#excluirCpPagamentomodal"]', function() {
-                var idCP = $(this).attr("data-idCP");
-                var idCpPgto = $(this).attr("data-idCpPgto");
-
-                $('#excluir_idCP').val(idCP);
-                $('#excluir_idCpPgto').val(idCpPgto);
-
-                $('#excluirCpPagamentomodal').modal('show');
-            });
-
-
-            var inserirModal = document.getElementById("inserirModal");
-
-            var inserirBtn = document.querySelector("button[data-target='#inserirModal']");
-
-            inserirBtn.onclick = function() {
-                inserirModal.style.display = "block";
-            };
-
-            window.onclick = function(event) {
-                if (event.target == inserirModal) {
-                    inserirModal.style.display = "none";
-                }
-            };
-        </script>
-        <script>
-            $(document).ready(function() {
-                $("#inserirFormContasPagar").submit(function(event) {
-                    event.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: "../database/contaspagar.php?operacao=inserir",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: refreshPage,
-                    });
-                });
-
-                $("#alterarFormContasPagar").submit(function(event) {
-                    event.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: "../database/contaspagar.php?operacao=alterar",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: refreshPage,
-                    });
-                });
-
-                $("#inserirFormCpPagamento").submit(function(event) {
-                    event.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: "../database/contaspagarpagamento.php?operacao=inserir",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: refreshPage,
-                    });
-                });
-
-                $("#excluirFormContasPagar").submit(function(event) {
-                    event.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: "../database/contaspagar.php?operacao=excluir",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: refreshPage,
-                    });
-                });
-
-                $("#excluirFormCpPagamento").submit(function(event) {
-                    event.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        url: "../database/contaspagarpagamento.php?operacao=excluir",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: refreshPage,
-                    });
-                });
-
-                function refreshPage() {
-                    window.location.reload();
+                    $("#dados_gerenciarPagamento").html(linha);
+                    $('#gerenciarpagamentomodal').modal('show')
                 }
             });
+        });
 
-            // FORMATAR DATAS
-            function formatDate(dateString) {
-                if (dateString !== null && !isNaN(new Date(dateString))) {
-                    var date = new Date(dateString);
-                    var day = date.getUTCDate().toString().padStart(2, '0');
-                    var month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-                    var year = date.getUTCFullYear().toString().padStart(4, '0');
-                    return day + "/" + month + "/" + year;
+        //MODAL EXCLUIR CONTAS PAGAR
+        $(document).on('click', 'a[data-target="#excluirContasPagarmodal"]', function() {
+            var idCP = $(this).attr("data-idCP");
+
+            $('#excluirContasPagar_idCP').val(idCP);
+
+            $('#excluirContasPagarmodal').modal('show');
+        });
+
+        //MODAL EXCLUIR CONTAS PAGAR PAGAMENTO
+        $(document).on('click', 'button[data-target="#excluirCpPagamentomodal"]', function() {
+            var idCP = $(this).attr("data-idCP");
+            var idCpPgto = $(this).attr("data-idCpPgto");
+
+            $('#excluir_idCP').val(idCP);
+            $('#excluir_idCpPgto').val(idCpPgto);
+
+            $('#excluirCpPagamentomodal').modal('show');
+        });
+
+        // OFFCANVAS CLONAR
+        $(document).on('click', 'button.clonarButton', function() {
+            var idCP = $(this).attr("data-idCP");
+            //alert(idCP)
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '../database/contaspagar.php?operacao=buscar',
+                data: {
+                    idCP: idCP
+                },
+                success: function(data) {
+                    //console.log(JSON.stringify(data, null, 2));
+                    $('#clonar_idPessoaFornecedor').val(data.idPessoaFornecedor);
+                    $('#clonar_dtCompetencia').val(data.dtCompetencia);
+                    $('#clonar_dtVencimento').val(data.dtVencimento);
+                    $('#clonar_documento').val(data.documento);
+                    $('#clonar_historico').val(data.historico);
+                    $('#clonar_idCategoria').val(data.idCategoria);
+                    $('#clonar_idPortador').val(data.idPortador);
+                    $('#clonar_valorOriginal').val(data.valorOriginal);
+                    $('#clonar_vencimento').val(data.dtVencimento);
+
+                    var texto = $("#tituloClonar");
+                    texto.html('Clonar documento: ' + data.documento);
+
+                    $('#offcanvasRight').show();
                 }
-                return "";
+            });
+        });
+
+
+        var inserirModal = document.getElementById("inserirModal");
+
+        var inserirBtn = document.querySelector("button[data-target='#inserirModal']");
+
+        inserirBtn.onclick = function() {
+            inserirModal.style.display = "block";
+        };
+
+        window.onclick = function(event) {
+            if (event.target == inserirModal) {
+                inserirModal.style.display = "none";
             }
-
-            // Ao iniciar o programa, inseri os valores de data nos inputs. 
-            $(document).ready(function() {
-                var data = new Date(),
-                    dia = data.getDate().toString(),
-                    diaF = (dia.length == 1) ? '0' + dia : dia,
-                    mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro come�a com zero.
-                    mesF = (mes.length == 1) ? '0' + mes : mes,
-                    anoF = data.getFullYear();
-                dataAtual = anoF + "-" + mesF + "-" + diaF;
-                primeirodiadomes = anoF + "-" + mesF + "-" + "01";
-
-                //modal inserir contaspagar
-                const inserir_dtCompetencia = document.getElementById("inserir_dtCompetencia");
-                inserir_dtCompetencia.value = dataAtual;
-
-                //modal baixar pagamento
-                const baixar_dtPagamento = document.getElementById("baixar_dtPagamento");
-                baixar_dtPagamento.value = dataAtual;
-
-                //filtro situacao
-                const datainiciomes = document.getElementById("datainiciomes");
-                datainiciomes.value = primeirodiadomes;
-
-                const dataatualmes = document.getElementById("dataatualmes");
-                dataatualmes.value = dataAtual;
-
-                //modal filtroPeriodo_modal
-                const FiltroPeriodoInicio = document.getElementById("FiltroPeriodoInicio");
-                FiltroPeriodoInicio.value = primeirodiadomes;
-
-                const FiltroPeriodoFim = document.getElementById("FiltroPeriodoFim");
-                FiltroPeriodoFim.value = dataAtual;
-
-            });
-
-            // Formatar input de valor decimal
-            $(document).ready(function() {
-                $('.formatValorDecimal').mask("#.##0,00", {
-                    reverse: true
+        };
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#inserirFormContasPagar").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/contaspagar.php?operacao=inserir",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: refreshPage,
                 });
-                $('.formatValorDecimal').addClass("text-end")
             });
-        </script>
 
-        <!-- LOCAL PARA COLOCAR OS JS -FIM -->
+            $("#inserirFormContasPagarClonar").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/contaspagar.php?operacao=inserir",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: refreshPage,
+                });
+            });
+
+            $("#alterarFormContasPagar").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/contaspagar.php?operacao=alterar",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: refreshPage,
+                });
+            });
+
+            $("#inserirFormCpPagamento").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/contaspagarpagamento.php?operacao=inserir",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: refreshPage,
+                });
+            });
+
+            $("#excluirFormContasPagar").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/contaspagar.php?operacao=excluir",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: refreshPage,
+                });
+            });
+
+            $("#excluirFormCpPagamento").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/contaspagarpagamento.php?operacao=excluir",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: refreshPage,
+                });
+            });
+
+
+            function refreshPage() {
+                window.location.reload();
+            }
+        });
+
+        // FORMATAR DATAS
+        function formatDate(dateString) {
+            if (dateString !== null && !isNaN(new Date(dateString))) {
+                var date = new Date(dateString);
+                var day = date.getUTCDate().toString().padStart(2, '0');
+                var month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+                var year = date.getUTCFullYear().toString().padStart(4, '0');
+                return day + "/" + month + "/" + year;
+            }
+            return "";
+        }
+
+        // Ao iniciar o programa, inseri os valores de data nos inputs. 
+        $(document).ready(function() {
+            var data = new Date(),
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro come�a com zero.
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            dataAtual = anoF + "-" + mesF + "-" + diaF;
+            primeirodiadomes = anoF + "-" + mesF + "-" + "01";
+
+            //modal inserir contaspagar
+            const inserir_dtCompetencia = document.getElementById("inserir_dtCompetencia");
+            inserir_dtCompetencia.value = dataAtual;
+
+            //modal baixar pagamento
+            const baixar_dtPagamento = document.getElementById("baixar_dtPagamento");
+            baixar_dtPagamento.value = dataAtual;
+
+            //filtro situacao
+            const datainiciomes = document.getElementById("datainiciomes");
+            datainiciomes.value = primeirodiadomes;
+
+            const dataatualmes = document.getElementById("dataatualmes");
+            dataatualmes.value = dataAtual;
+
+            //modal filtroPeriodo_modal
+            const FiltroPeriodoInicio = document.getElementById("FiltroPeriodoInicio");
+            FiltroPeriodoInicio.value = primeirodiadomes;
+
+            const FiltroPeriodoFim = document.getElementById("FiltroPeriodoFim");
+            FiltroPeriodoFim.value = dataAtual;
+
+        });
+
+        // Formatar input de valor decimal
+        $(document).ready(function() {
+            $('.formatValorDecimal').mask("#.##0,00", {
+                reverse: true
+            });
+            $('.formatValorDecimal').addClass("text-end")
+        });
+    </script>
+
+    <!-- LOCAL PARA COLOCAR OS JS -FIM -->
 
 
 </body>

@@ -111,15 +111,15 @@ $portadores = buscaPortador();
             <table class="table table-sm table-hover">
                 <thead class="ts-headertabelafixo">
                     <tr>
-                        <th>Documento</th>
-                        <th>Cliente</th>
-                        <th>dtPagamento</th>
-                        <th>Historico</th>
-                        <th>Categoria</th>
-                        <th>Portador</th>
-                        <th>Acrescimos</th>
-                        <th>Descontos</th>
-                        <th>Valor Pago</th>
+                        <th class="text-start">Documento</th>
+                        <th class="text-start">Cliente</th>
+                        <th class="text-start">dtPagamento</th>
+                        <th class="text-start">Historico</th>
+                        <th class="text-start">Categoria</th>
+                        <th class="text-start">Portador</th>
+                        <th class="text-end">Acrescimos</th>
+                        <th class="text-end">Descontos</th>
+                        <th class="text-end">Valor Pago</th>
                     </tr>
                 </thead>
 
@@ -189,7 +189,7 @@ $portadores = buscaPortador();
                             linha += "<tr>";
                             linha += "<td class='text-start ts-click' data-idCR='" + object.idCR + "'>" + object.documento + "</td>";
                             linha += "<td class='text-start ts-click' data-idCR='" + object.idCR + "'>" + object.nomePessoa + "</td>";
-                            linha += "<td class='ts-click' data-idCR='" + object.idCR + "'>" + dataPagamentoFormatada + "</td>";
+                            linha += "<td class='text-start ts-click' data-idCR='" + object.idCR + "'>" + dataPagamentoFormatada + "</td>";
                             linha += "<td class='text-start ts-click' data-idCR='" + object.idCR + "'>" + object.historico + "</td>";
                             linha += "<td class='text-start ts-click' data-idCR='" + object.idCR + "'>" + object.nomeCategoria + "</td>";
                             linha += "<td class='text-start ts-click' data-idCR='" + object.idCR + "'>" + object.nomePortador + "</td>";
