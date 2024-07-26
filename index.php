@@ -89,11 +89,11 @@ if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && 
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=contasreceber"
                         <?php if ($getTab == "contasreceber") {echo " selected ";} ?>>Contas à Receber</option>
                         <?php }
-
+                        if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=contaspagar" 
                         <?php if ($getTab == "contaspagar") {echo " selected ";} ?>>Contas à Pagar</option>
                         <?php }
-
+                        if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=dashboard" 
                         <?php if ($getTab == "dashboard") {echo " selected ";} ?>>Dashboard</option>
                         <?php }
