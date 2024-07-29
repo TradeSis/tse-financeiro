@@ -54,8 +54,16 @@ if ($metodo == "PUT") {
       include 'contasreceber_inserir.php';
       break;
 
+    case "contasreceber_clonar":
+      include 'contasreceber_clonar.php';
+      break;
+
     case "contaspagar":
       include 'contaspagar_inserir.php';
+      break;
+
+    case "contaspagar_clonar":
+      include 'contaspagar_clonar.php';
       break;
 
     case "contaspagarpagamento":
