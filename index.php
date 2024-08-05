@@ -3,7 +3,12 @@
 include_once __DIR__ . "/../config.php";
 include_once "header.php";
 
-if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && $_SESSION['nomeAplicativo'] !== 'Financeiro'){
+if (
+    !isset($_SESSION['nomeAplicativo']) || 
+    $_SESSION['nomeAplicativo'] !== 'Financeiro' || 
+    !isset($_SESSION['nivelMenu']) || 
+    $_SESSION['nivelMenu'] === null
+) {
     $_SESSION['nomeAplicativo'] = 'Financeiro';
     include_once ROOT . "/sistema/database/loginAplicativo.php";
 
