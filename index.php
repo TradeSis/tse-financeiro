@@ -2,12 +2,14 @@
 //lucas 09102023 novo padrao
 include_once __DIR__ . "/../config.php";
 include_once "header.php";
-include_once ROOT . "/sistema/database/loginAplicativo.php";
 
-$nivelMenuLogin = buscaLoginAplicativo($_SESSION['idLogin'], 'Financeiro');
+if(!isset($_SESSION['nomeAplicativo']) || isset($_SESSION['nomeAplicativo']) && $_SESSION['nomeAplicativo'] !== 'Financeiro'){
+    $_SESSION['nomeAplicativo'] = 'Financeiro';
+    include_once ROOT . "/sistema/database/loginAplicativo.php";
 
-$configuracao = 1;
-$nivelMenu = $nivelMenuLogin['nivelMenu'];
+    $nivelMenuLogin = buscaLoginAplicativo($_SESSION['idLogin'], $_SESSION['nomeAplicativo']);
+    $_SESSION['nivelMenu'] = $nivelMenuLogin['nivelMenu'];
+}
 
 ?>
 <!doctype html>
@@ -39,7 +41,7 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                             $tab = $_GET['tab'];
                         }
                         ?>
-                        <?php if ($nivelMenu == 5) {
+                        <?php if ($_SESSION['nivelMenu'] == 5) {
                             if ($tab == '') {
                                 $tab = 'contasreceber';
                             } ?>
@@ -49,35 +51,21 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                                 href="?tab=contasreceber" role="tab">Contas à Receber</a>
                             </li>
                         <?php }
-                        if ($nivelMenu == 5) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "gerenciarrecebimentos") {echo " active ";} ?>" 
-                                href="?tab=gerenciarrecebimentos" role="tab">Gerenciar Recebimentos</a>
-                            </li>
-                        <?php }
-                        if ($nivelMenu == 5) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "contaspagar") {echo " active ";} ?>" 
                                 href="?tab=contaspagar" role="tab">Contas à Pagar</a>
                             </li>
                         <?php }
-                        if ($nivelMenu == 5) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "gerenciarpagamentos") {echo " active ";} ?>" 
-                                href="?tab=gerenciarpagamentos" role="tab">Gerenciar Pagamentos</a>
-                            </li>
-                        <?php }
-                        if ($nivelMenu == 5) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "dashboard") {echo " active ";} ?>" 
                                 href="?tab=dashboard" role="tab">Dashboard</a>
                             </li>
                         <?php }
-                        if ($nivelMenu == 5) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "configuracao") {echo " active ";} ?>" 
@@ -96,23 +84,24 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                     $getTab = '';
                 }?>
                     <select class="form-select mt-2 ts-selectSubMenuAplicativos" id="subtabFinanceiro">
+
+                        <?php if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=contasreceber"
                         <?php if ($getTab == "contasreceber") {echo " selected ";} ?>>Contas à Receber</option>
-
-                        <option value="<?php echo URLROOT ?>/financeiro/?tab=gerenciarrecebimentos"
-                        <?php if ($getTab == "gerenciarrecebimentos") {echo " selected ";} ?>>Gerenciar Recebimentos</option>
-
+                        <?php }
+                        if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=contaspagar" 
                         <?php if ($getTab == "contaspagar") {echo " selected ";} ?>>Contas à Pagar</option>
-
-                        <option value="<?php echo URLROOT ?>/financeiro/?tab=gerenciarpagamentos"
-                        <?php if ($getTab == "gerenciarpagamentos") {echo " selected ";} ?>>Gerenciar Pagamentos</option>
-
+                        <?php }
+                        if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=dashboard" 
                         <?php if ($getTab == "dashboard") {echo " selected ";} ?>>Dashboard</option>
+                        <?php }
 
+                        if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=configuracao" 
                         <?php if ($getTab == "configuracao") {echo " selected ";} ?>>Configurações</option>
+                        <?php } ?>
                     </select>
                 </div>
                 
@@ -129,17 +118,9 @@ $nivelMenu = $nivelMenuLogin['nivelMenu'];
                 $src = "consultas/contasreceber.php";
                 $title = "Financeiro/Contas à Receber";
             }
-            if ($tab == "gerenciarrecebimentos") {
-                $src = "consultas/gerenciarrecebimentos.php";
-                $title = "Financeiro/Gerenciar Recebimentos";
-            }
             if ($tab == "contaspagar") {
                 $src = "consultas/contaspagar.php";
                 $title = "Financeiro/Contas à Pagar";
-            }
-            if ($tab == "gerenciarpagamentos") {
-                $src = "consultas/gerenciarpagamentos.php";
-                $title = "Financeiro/Gerenciar Pagamentos";
             }
             if ($tab == "dashboard") {
                 $src = "consultas/dashboard.php";
