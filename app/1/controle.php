@@ -36,6 +36,10 @@ if ($metodo == "GET") {
       include 'contasreceberpagamento.php';
       break;
 
+    case "caixaebancos":
+      include 'caixaebancos.php';
+      break;
+      
     default:
       $jsonSaida = json_decode(json_encode(
         array(
@@ -84,6 +88,10 @@ if ($metodo == "PUT") {
 
     case "contasreceberpagamento":
       include 'contasreceberpagamento_inserir.php';
+      break;
+    
+    case "transferencia":
+      include 'caixaebancos_transferencia.php';
       break;
 
     default:

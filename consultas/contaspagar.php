@@ -10,7 +10,11 @@ include_once(__DIR__ . '/../database/portador.php');
 
 $pessoas = buscarPessoa();
 $contacategorias = buscaContaCategoria(null, "CP");
+if(isset($contacategorias['status']) == 400){
+    $contacategorias = null;
+}
 $portadores = buscaPortador();
+
 
 ?>
 
