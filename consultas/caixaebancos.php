@@ -159,9 +159,24 @@ $portadores = buscaPortador();
     <?php include_once ROOT . "/vendor/footer_js.php"; ?>
 
     <script>
-        $(document).ready(function() {
+         // Ao iniciar o programa, inseri os valores de ano(input) e mes(select) atuais. 
+         $(document).ready(function() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const currentMonth = date.getMonth() + 1;
+
+            const FiltroDataAno = document.getElementById("FiltroDataAno");
+            FiltroDataAno.value = year;
+            ano = year;
+
+            const FiltroDataMes = document.getElementById("FiltroDataMes");
+            FiltroDataMes.value = (currentMonth <= 9 ? "0" + currentMonth : currentMonth);
+            mes = (currentMonth <= 9 ? "0" + currentMonth : currentMonth)
+
             var texto = $("#textocontador");
             texto.html('total: ' + 0);
+
+            buscar(ano, mes, $("#FiltroPortador").val());
         });
 
         function buscar(FiltroDataAno, FiltroDataMes, FiltroPortador) {
@@ -229,7 +244,7 @@ $portadores = buscaPortador();
                                     
                                     if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
                                         linha = linha + "<td class='text-start'>ORIGEM: " + object.cbportador + "</td>";
-                                        linha = linha + "<td class='text-start'>DESTINO: " + object.cbportadorDestino + "</td>";
+                                        linha = linha + "<td class='text-start'>" + object.cbportadorDestino + "</td>";
                                     }else{
                                         linha = linha + "<td class='text-start'>" + object.cbhistorico + "</td>";
                                         linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
@@ -313,20 +328,6 @@ $portadores = buscaPortador();
             }
             return "";
         }
-
-        // Ao iniciar o programa, inseri os valores de ano(input) e mes(select) atuais. 
-        $(document).ready(function() {
-            const date = new Date();
-            const year = date.getFullYear();
-            const currentMonth = date.getMonth() + 1;
-
-            const FiltroDataAno = document.getElementById("FiltroDataAno");
-            FiltroDataAno.value = year;
-
-            const FiltroDataMes = document.getElementById("FiltroDataMes");
-            FiltroDataMes.value = (currentMonth <= 9 ? "0" + currentMonth : currentMonth);
-
-        });
 
          // Formatar input de valor decimal
          $(document).ready(function() {
