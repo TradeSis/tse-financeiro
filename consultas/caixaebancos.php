@@ -43,10 +43,10 @@ $portadores = buscaPortador();
                     <?php } ?>
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-4">
 
             </div>
-            <div class="col-4 gap-1 d-flex">
+            <div class="col-3 gap-1 d-flex">
                 <input type="text" class="form-control ts-input" name="anoImposto" id="FiltroDataAno" placeholder="Ano" autocomplete="off" required>
 
                 <select class="form-select ts-input" name="mesImposto" id="FiltroDataMes">
@@ -63,8 +63,7 @@ $portadores = buscaPortador();
                     <option value="11">Novembro</option>
                     <option value="12">Dezembro</option>
                 </select>
-
-                <button class="btn btn-sm btn-primary" type="button" id="filtrardata">Filtrar</button>
+                <button class="btn btn-sm btn-primary d-none" type="button" id="filtrardata">Filtrar</button>
             </div>
             <div class="col-1 text-end">
                 <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#transferir" aria-controls="offcanvasRight">Tranferir</button>
@@ -81,7 +80,6 @@ $portadores = buscaPortador();
                         <th class="text-start">Historico</th>
                         <th class="text-start">Portador</th>
                         <th class="text-end">Valor</th>
-                        <th></th>
                     </tr>
                 </thead>
 
@@ -132,22 +130,16 @@ $portadores = buscaPortador();
                             </select>
                         </div>
                     </div>
-                    <div class="row d-none">
-                        <div class="col-md">
-                            <span>Saldo:</span>
-                        </div>
-                        <div class="col-md">
-                            <span>Saldo:</span>
-                        </div>
-                    </div>
+                   
                     <div class="row mt-4">
                         <div class="col-md">
                             <label class="form-label ts-label">valor</label>
+                            <!-- <input type="number" class="form-control ts-input" step="0.01" name="valor" id="valor" required> -->
                             <input type="text" class="form-control ts-input formatValorDecimal" name="valor" id="valor" required>
                         </div>
                         <div class="col-md">
-                            <label class="form-label ts-label">Data de transferencia *</label>
-                            <input type="date" class="form-control ts-input" name="data" id="data" required>
+                            <label class="form-label ts-label">Data de transferencia</label>
+                            <input type="date" class="form-control ts-input dataTransferencia" name="data" id="data" required>
                         </div>
 
                     </div>
@@ -214,47 +206,47 @@ $portadores = buscaPortador();
                                 var valorPagoFormatado = object.cbvalorPago.toLocaleString('pt-BR', {
                                     minimumFractionDigits: 2
                                 });
-
+                                //LINHA DE TOTAL
                                 if (object.cbidentificador == "TOTAL") {
                                     linha = linha + "<tr class='table-active'>";
-                                } else {
-                                    linha = linha + "<tr>";
-                                }
-
-                                if (object.cbidentificador == "TOTAL") {
+                                    
                                     linha = linha + "<td></td>";
-                                }else{
-                                    linha = linha + "<td>" + formatDate(object.cbdtPagamento) + "</td>";
-                                }
-                                
-                                if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
-                                    linha = linha + "<td class='text-start fst-italic'>Transferência</td>";
-                                }else{
-                                    linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
-                                }
-                                
-                                if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
-                                    linha = linha + "<td class='text-start fst-italic'>" + object.cbportador + "</td>";
-                                    linha = linha + "<td class='text-start fst-italic'>" + object.cbportadorDestino + "</td>";
-                                }else{
-                                    linha = linha + "<td class='text-start'>" + object.cbhistorico + "</td>";
-                                    linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
-                                }
-
-                                if (object.cbidentificador == "TOTAL") {
+                                    linha = linha + "<td></td>";
+                                    linha = linha + "<td></td>";
+                                    linha = linha + "<td>Saldo em: " + formatDate(object.cbdtPagamento) + "</td>";
                                     linha = linha + "<td class='text-end fw-bold text-secundary border-0'>" + valorPagoFormatado + "</td>";
-                                } else if (object.cbidentificador == "CR") {
-                                    linha = linha + "<td class='text-end fw-bold text-success border-0'>" + valorPagoFormatado + "</td>";
-                                } else if (object.cbidentificador == "TRE") {
-                                    linha = linha + "<td class='text-end fw-bold fst-italic text-success border-0'>" + valorPagoFormatado + "</td>";
-                                }else if (object.cbidentificador == "TRS") {
-                                    linha = linha + "<td class='text-end fw-bold fst-italic text-danger border-0'> -" + valorPagoFormatado + "</td>";
-                                } else {
-                                    linha = linha + "<td class='text-end fw-bold text-danger border-0'> -" + valorPagoFormatado + "</td>";
+
+                                    linha = linha + "</tr>";
+                                }else{
+                                    linha = linha + "<tr>";
+
+                                    linha = linha + "<td>" + formatDate(object.cbdtPagamento) + "</td>";
+                                    if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
+                                    linha = linha + "<td class='text-start'>Transferência</td>";
+                                    }else{
+                                        linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
+                                    }
+                                    
+                                    if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
+                                        linha = linha + "<td class='text-start'>ORIGEM: " + object.cbportador + "</td>";
+                                        linha = linha + "<td class='text-start'>DESTINO: " + object.cbportadorDestino + "</td>";
+                                    }else{
+                                        linha = linha + "<td class='text-start'>" + object.cbhistorico + "</td>";
+                                        linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
+                                    }
+
+                                    if (object.cbidentificador == "CR") {
+                                        linha = linha + "<td class='text-end fw-bold text-success border-0'>" + valorPagoFormatado + "</td>";
+                                    } else if (object.cbidentificador == "TRE") {
+                                        linha = linha + "<td class='text-end fw-bold text-success border-0'>" + valorPagoFormatado + "</td>";
+                                    }else if (object.cbidentificador == "TRS") {
+                                        linha = linha + "<td class='text-end fw-bold text-danger border-0'> -" + valorPagoFormatado + "</td>";
+                                    } else {
+                                        linha = linha + "<td class='text-end fw-bold text-danger border-0'> -" + valorPagoFormatado + "</td>";
+                                    }
+
+                                    linha = linha + "</tr>";
                                 }
-
-
-                                linha = linha + "</tr>";
 
                             }
 
@@ -271,9 +263,22 @@ $portadores = buscaPortador();
 
         }
 
-
         $("#filtrardata").click(function() {
             buscar($("#FiltroDataAno").val(), $("#FiltroDataMes").val(), $("#FiltroPortador").val());
+        });
+
+        $("#FiltroPortador").change(function() {
+            buscar($("#FiltroDataAno").val(), $("#FiltroDataMes").val(), $("#FiltroPortador").val());
+        });
+
+        $("#FiltroDataMes").change(function() {
+            buscar($("#FiltroDataAno").val(), $("#FiltroDataMes").val(), $("#FiltroPortador").val());
+        });
+
+        document.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                buscar($("#FiltroDataAno").val(), $("#FiltroDataMes").val(), $("#FiltroPortador").val());
+            }
         });
 
         //MODAL BAIXARPAGAMENTO
@@ -281,6 +286,19 @@ $portadores = buscaPortador();
 
             portador = $("#FiltroPortador").val();
             $('#idPortadorOrigem').val(portador);
+
+            var data = new Date(),
+                dia = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0' + dia : dia,
+                mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro come�a com zero.
+                mesF = (mes.length == 1) ? '0' + mes : mes,
+                anoF = data.getFullYear();
+            dataAtual = anoF + "-" + mesF + "-" + diaF;
+            primeirodiadomes = anoF + "-" + mesF + "-" + "01";
+
+            // offCanvas data
+            const dataTransferencia = document.getElementById("data");
+            dataTransferencia.value = dataAtual;
 
         });
 
@@ -308,6 +326,14 @@ $portadores = buscaPortador();
             const FiltroDataMes = document.getElementById("FiltroDataMes");
             FiltroDataMes.value = (currentMonth <= 9 ? "0" + currentMonth : currentMonth);
 
+        });
+
+         // Formatar input de valor decimal
+         $(document).ready(function() {
+            $('.formatValorDecimal').mask("#.##0,00", {
+                reverse: true
+            });
+            $('.formatValorDecimal').addClass("text-end")
         });
 
         $("#transferirForm").submit(function(event) {

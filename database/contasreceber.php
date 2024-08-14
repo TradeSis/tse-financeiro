@@ -33,7 +33,7 @@ if (isset($_GET['operacao'])) {
 		// tratamento de valores para banco progress
 		$valorOriginal_formatado = $_POST['valorOriginal'];
 		$valorOriginal_formatado = str_replace('.', '', $valorOriginal_formatado); // remove o ponto
-		$valorOriginal_formatado = str_replace(',', '.', $valorOriginal_formatado); // troca a vírgula por ponto
+		$valorOriginal_formatado = str_replace(',', '.', $valorOriginal_formatado); // troca a vï¿½rgula por ponto
 
 		$apiEntrada = array(
 			'idEmpresa' => $_SESSION['idEmpresa'],
@@ -63,7 +63,7 @@ if (isset($_GET['operacao'])) {
 		// tratamento de valores para banco progress
 		$valorOriginal_formatado = $_POST['valorOriginal'];
 		$valorOriginal_formatado = str_replace('.', '', $valorOriginal_formatado); // remove o ponto
-		$valorOriginal_formatado = str_replace(',', '.', $valorOriginal_formatado); // troca a vírgula por ponto
+		$valorOriginal_formatado = str_replace(',', '.', $valorOriginal_formatado); // troca a vï¿½rgula por ponto
 
 		$apiEntrada = array(
 			'idEmpresa' => $_SESSION['idEmpresa'],

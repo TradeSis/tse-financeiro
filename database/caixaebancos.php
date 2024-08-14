@@ -29,18 +29,27 @@ if (isset($_GET['operacao'])) {
 	}
 
 	if ($operacao == "transferir") {
-	
+		$arquivo = fopen("C:TRADESIS/tmp/LOG.txt", "a");
+		fwrite($arquivo, json_encode($_POST) . "\n");
+		fclose($arquivo);
+		//return;
+
+		// tratamento de valores para banco progress
+		$valor_formatado = $_POST['valor'];
+		$valor_formatado = str_replace('.', '', $valor_formatado); // remove o ponto
+		$valor_formatado = str_replace(',', '.', $valor_formatado); // troca a v�rgula por ponto
+		
 		$data = isset($_POST["data"]) && $_POST["data"] !== "null"  ? $_POST["data"]  : null;
 		$idPortadorOrigem = isset($_POST["idPortadorOrigem"]) && $_POST["idPortadorOrigem"] !== "null"  ? $_POST["idPortadorOrigem"]  : null;
 		$idPortadorDestino = isset($_POST["idPortadorDestino"]) && $_POST["idPortadorDestino"] !== "null"  ? $_POST["idPortadorDestino"]  : null;
-		$valor = isset($_POST["valor"]) && $_POST["valor"] !== "null"  ? $_POST["valor"]  : null;
+		
 		
 		$apiEntrada = array(
 			'idEmpresa' => $_SESSION['idEmpresa'],
 			'data' => $data,
 			'idPortadorOrigem' => $idPortadorOrigem,
 			'idPortadorDestino' => $idPortadorDestino,
-			'valor' => $valor
+			'valor' => $valor_formatado
 		);
 		
 		$caixaebancos = chamaAPI(null, '/financeiro/transferencia', json_encode($apiEntrada), 'PUT');
