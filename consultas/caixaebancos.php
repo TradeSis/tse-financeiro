@@ -241,10 +241,13 @@ $portadores = buscaPortador();
                                     }else{
                                         linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
                                     }
-                                    
-                                    if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
+
+                                    if(object.cbidentificador == "TRE"){
                                         linha = linha + "<td class='text-start'>ORIGEM: " + object.cbportador + "</td>";
                                         linha = linha + "<td class='text-start'>" + object.cbportadorDestino + "</td>";
+                                    }else if(object.cbidentificador == "TRS"){
+                                        linha = linha + "<td class='text-start'>DESTINO: " + object.cbportadorDestino + "</td>";
+                                        linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
                                     }else{
                                         linha = linha + "<td class='text-start'>" + object.cbhistorico + "</td>";
                                         linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
