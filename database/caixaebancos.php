@@ -29,10 +29,6 @@ if (isset($_GET['operacao'])) {
 	}
 
 	if ($operacao == "transferir") {
-		$arquivo = fopen("C:TRADESIS/tmp/LOG.txt", "a");
-		fwrite($arquivo, json_encode($_POST) . "\n");
-		fclose($arquivo);
-		//return;
 
 		// tratamento de valores para banco progress
 		$valor_formatado = $_POST['valor'];
@@ -58,5 +54,16 @@ if (isset($_GET['operacao'])) {
 		return $caixaebancos;
 	}
 
+	if ($operacao == "excluirTransferencia") {
+	
+		$apiEntrada = array(
+			'id_recid' => $_POST['id_recid']
+		);
+		
+		$caixaebancos = chamaAPI(null, '/financeiro/caixaebancos', json_encode($apiEntrada), 'DELETE');
+
+		echo json_encode($caixaebancos);
+		return $caixaebancos;
+	}
 
 }

@@ -166,6 +166,10 @@ if ($metodo == "DELETE") {
     case "contasreceberpagamento":
       include 'contasreceberpagamento_excluir.php';
       break;
+
+    case "caixaebancos":
+      include 'caixaebancos_excluir.php';
+      break;
   
     default:
       $jsonSaida = json_decode(json_encode(

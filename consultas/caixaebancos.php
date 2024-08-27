@@ -28,7 +28,7 @@ $portadores = buscaPortador();
         <div class="row d-flex align-items-center justify-content-center mt-1 pt-1 ">
 
             <div class="col-2">
-                <h2 class="ts-tituloPrincipal">Caixa e Banco</h2>
+                <h2 class="ts-tituloPrincipal">Caixa e Bancos</h2>
             </div>
 
             <div class="col-2">
@@ -75,11 +75,13 @@ $portadores = buscaPortador();
             <table class="table table-sm table-hover">
                 <thead class="ts-headertabelafixo">
                     <tr class="ts-headerTabelaLinhaCima">
+                        <th class="text-start">Documento</th>
+                        <th class="text-start">Cliente/Fornecedor</th>
                         <th>Data</th>
-                        <th class="text-start">Categoria</th>
                         <th class="text-start">Historico</th>
-                        <th class="text-start">Portador</th>
+                        <th class="text-start">Categoria</th>
                         <th class="text-end">Valor</th>
+                        <th style="width: 20px;"></th>
                     </tr>
                 </thead>
 
@@ -130,11 +132,10 @@ $portadores = buscaPortador();
                             </select>
                         </div>
                     </div>
-                   
+
                     <div class="row mt-4">
                         <div class="col-md">
                             <label class="form-label ts-label">valor</label>
-                            <!-- <input type="number" class="form-control ts-input" step="0.01" name="valor" id="valor" required> -->
                             <input type="text" class="form-control ts-input formatValorDecimal" name="valor" id="valor" required>
                         </div>
                         <div class="col-md">
@@ -150,7 +151,38 @@ $portadores = buscaPortador();
             </div>
             </form>
         </div>
-    </div>
+
+        <!--------- EXCLUIR TRANSFERENCIA --------->
+        <div class="modal fade" id="excluirTransferencia" tabindex="-1" aria-labelledby="excluirTransferenciaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-0 mb-0 pb-0">
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-4" style="font-size: 30px;"></i>
+                            <div>
+                                Deseja Realmente excluir essa Transferencia?
+                            </div>
+                        </div>
+                        <form method="post" id="excluirTransferenciaForm">
+                            <div class="row mt-2 d-none">
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Transferencia</label>
+                                    <input type="text" class="form-control ts-input" name="id_recid" id="exc_id_recid" readonly>
+                                </div>
+                            </div>
+                    </div><!--body-->
+                    <div class="modal-footer mt-0 pt-0">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Nao</button>
+                        <button type="submit" class="btn btn-success">Sim</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </div><!--container-fluid-->
 
@@ -159,8 +191,8 @@ $portadores = buscaPortador();
     <?php include_once ROOT . "/vendor/footer_js.php"; ?>
 
     <script>
-         // Ao iniciar o programa, inseri os valores de ano(input) e mes(select) atuais. 
-         $(document).ready(function() {
+        // Ao iniciar o programa, inseri os valores de ano(input) e mes(select) atuais. 
+        $(document).ready(function() {
             const date = new Date();
             const year = date.getFullYear();
             const currentMonth = date.getMonth() + 1;
@@ -224,44 +256,60 @@ $portadores = buscaPortador();
                                 //LINHA DE TOTAL
                                 if (object.cbidentificador == "TOTAL") {
                                     linha = linha + "<tr class='table-active'>";
-                                    
+
                                     linha = linha + "<td></td>";
                                     linha = linha + "<td></td>";
                                     linha = linha + "<td></td>";
-                                    linha = linha + "<td>Saldo em: " + formatDate(object.cbdtPagamento) + "</td>";
+                                    linha = linha + "<td></td>";
+                                    linha = linha + "<td class='text-end' >Saldo em: " + formatDate(object.cbdtPagamento) + "</td>";
                                     linha = linha + "<td class='text-end fw-bold text-secundary border-0'>" + valorPagoFormatado + "</td>";
 
                                     linha = linha + "</tr>";
-                                }else{
+                                } else {
                                     linha = linha + "<tr>";
 
-                                    linha = linha + "<td>" + formatDate(object.cbdtPagamento) + "</td>";
-                                    if(object.cbidentificador == "TRE" || object.cbidentificador == "TRS"){
-                                    linha = linha + "<td class='text-start'>Transferência</td>";
-                                    }else{
-                                        linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
-                                    }
+                                    linha = linha + "<td class='text-start'>" + object.cbdocumento + "</td>";
 
-                                    if(object.cbidentificador == "TRE"){
+                                    linha = linha + "<td class='text-start'>" + object.cbnomePessoaFornecedor + "</td>";
+                                    linha = linha + "<td>" + formatDate(object.cbdtPagamento) + "</td>";
+
+                                    if (object.cbidentificador == "TRE") {
                                         linha = linha + "<td class='text-start'>ORIGEM: " + object.cbportador + "</td>";
-                                        linha = linha + "<td class='text-start'>" + object.cbportadorDestino + "</td>";
-                                    }else if(object.cbidentificador == "TRS"){
+                                        linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
+                                    } else if (object.cbidentificador == "TRS") {
                                         linha = linha + "<td class='text-start'>DESTINO: " + object.cbportadorDestino + "</td>";
-                                        linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
-                                    }else{
+                                        linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
+                                    } else {
                                         linha = linha + "<td class='text-start'>" + object.cbhistorico + "</td>";
-                                        linha = linha + "<td class='text-start'>" + object.cbportador + "</td>";
+                                        linha = linha + "<td class='text-start'>" + object.cbcategoria + "</td>";
                                     }
 
                                     if (object.cbidentificador == "CR") {
                                         linha = linha + "<td class='text-end fw-bold text-success border-0'>" + valorPagoFormatado + "</td>";
                                     } else if (object.cbidentificador == "TRE") {
                                         linha = linha + "<td class='text-end fw-bold text-success border-0'>" + valorPagoFormatado + "</td>";
-                                    }else if (object.cbidentificador == "TRS") {
+                                    } else if (object.cbidentificador == "TRS") {
                                         linha = linha + "<td class='text-end fw-bold text-danger border-0'> -" + valorPagoFormatado + "</td>";
                                     } else {
                                         linha = linha + "<td class='text-end fw-bold text-danger border-0'> -" + valorPagoFormatado + "</td>";
                                     }
+
+                                    linha += "<td>";
+                                    linha += "<div class='btn-group dropstart'><button type='button' class='btn' data-toggle='tooltip' data-placement='left' title='Opções' data-bs-toggle='dropdown' " +
+                                        " aria-expanded='false' style='box-shadow:none'><i class='bi bi-three-dots-vertical'></i></button><ul class='dropdown-menu'>";
+
+                                    if (object.cbidentificador == "CR") {
+                                        linha += "<li class='ms-1 me-1'><a class='btn btn-primary btn-sm w-100 text-start' href='gerenciarrecebimentos.php' role='button'><i class='bi bi-clipboard-pulse'></i> Gerenciar</a></td>";
+                                    } else if (object.cbidentificador == "CP") {
+                                        linha += "<li class='ms-1 me-1'><a class='btn btn-primary btn-sm w-100 text-start' href='gerenciarpagamentos.php' role='button'><i class='bi bi-clipboard-pulse'></i> Gerenciar</a></td>";
+                                    } else {
+                                        linha += "<li class='ms-1 me-1'><a class='btn btn-danger btn-sm w-100 text-start' data-bs-toggle='modal' data-bs-target='#excluirTransferencia' ";
+                                        linha += " data-id_recid='" + object.id_recid + "' ";
+                                        linha += " role='button'><i class='bi bi-trash3'></i> Excluir</a></li>";
+                                    }
+
+                                    linha += "</tr></ul></div>"
+                                    linha += "</td>";
 
                                     linha = linha + "</tr>";
                                 }
@@ -320,6 +368,17 @@ $portadores = buscaPortador();
 
         });
 
+        //MODAL EXCLUIR
+        $(document).on('click', 'a[data-bs-target="#excluirTransferencia"]', function() {
+            var id_recid = $(this).attr("data-id_recid");
+
+            $('#exc_id_recid').val(id_recid);
+
+            $('#excluirTransferencia').modal('show');
+
+        });
+      
+
         // FORMATAR DATAS
         function formatDate(dateString) {
             if (dateString !== null && !isNaN(new Date(dateString))) {
@@ -332,8 +391,8 @@ $portadores = buscaPortador();
             return "";
         }
 
-         // Formatar input de valor decimal
-         $(document).ready(function() {
+        // Formatar input de valor decimal
+        $(document).ready(function() {
             $('.formatValorDecimal').mask("#.##0,00", {
                 reverse: true
             });
@@ -352,7 +411,20 @@ $portadores = buscaPortador();
                 success: (setTimeout(FechaOffCanvas, 1000))
             });
         });
-        
+
+        $("#excluirTransferenciaForm").submit(function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "../database/caixaebancos.php?operacao=excluirTransferencia",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: refreshPage
+            });
+        });
+
 
         function FechaOffCanvas() {
             const elemento = document.getElementById('filtrardata');

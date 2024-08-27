@@ -30,6 +30,9 @@ def temp-table ttcaixaebancos  no-undo serialize-name "caixaebancos"  /* JSON SA
     FIELD cbportadorDestino  AS CHAR
     FIELD cbidentificador  AS CHAR
     FIELD cbqtd AS INT
+    FIELD cbdocumento AS CHAR
+    FIELD cbnomePessoaFornecedor AS CHAR
+    FIELD id_recid AS INT64
     index dt is primary cbdtpagamento asc.
     
  
@@ -50,7 +53,7 @@ if NOT AVAIL ttentrada then do:
     RETURN.
 end.
 
-
+    
 RUN LOG("PORTADOR: " + string(ttentrada.portador)).
 RUN LOG("ANO: " + string(ttentrada.anoEntrada)).
 RUN LOG("MES: " + string(ttentrada.mesEntrada)).
@@ -127,6 +130,7 @@ FOR EACH cbtransferencia WHERE
         bttcaixaebancos.cbportador = vportadorOrigem.
         bttcaixaebancos.cbportadorDestino = vportadorDestino.
         bttcaixaebancos.cbidentificador = "TRS".
+        bttcaixaebancos.id_recid = RECID(cbtransferencia).
 END.
 
 
@@ -148,6 +152,7 @@ FOR EACH cbtransferencia WHERE
         bttcaixaebancos.cbportador = vportadorOrigem.
         bttcaixaebancos.cbportadorDestino = vportadorDestino.
         bttcaixaebancos.cbidentificador = "TRE".
+        bttcaixaebancos.id_recid = RECID(cbtransferencia).
 END.
   
 
@@ -162,6 +167,9 @@ FOR EACH contaspagarpagamento WHERE
             
         FIND contascategoria WHERE contascategoria.idCategoria = ttcontaspagarpagamento.idCategoria NO-LOCK.
         FIND portador WHERE portador.idPortador = ttcontaspagarpagamento.idPortador NO-LOCK.
+        FIND contaspagar OF ttcontaspagarpagamento.
+        FIND pessoas WHERE pessoa.idpessoa = contaspagar.idPessoaFornecedor.
+        FIND geralpessoas OF pessoas.
                 
         CREATE ttcaixaebancos.
         ttcaixaebancos.cbdtPagamento = ttcontaspagarpagamento.dtPagamento.
@@ -169,6 +177,8 @@ FOR EACH contaspagarpagamento WHERE
         ttcaixaebancos.cbvalorPago = ttcontaspagarpagamento.valorPago.
         ttcaixaebancos.cbcategoria = contascategoria.nomeCategoria.
         ttcaixaebancos.cbportador = portador.nomePortador.
+        ttcaixaebancos.cbdocumento = contaspagar.documento.
+        ttcaixaebancos.cbnomePessoaFornecedor = geralpessoas.nomeFantasia.
         ttcaixaebancos.cbidentificador = "CP".
 END.  
 
@@ -184,6 +194,9 @@ FOR EACH contasreceberpagamento WHERE
         
         FIND contascategoria WHERE contascategoria.idCategoria = ttcontasreceberpagamento.idCategoria NO-LOCK. 
         FIND portador WHERE portador.idPortador = ttcontasreceberpagamento.idPortador NO-LOCK.
+        FIND contasreceber OF ttcontasreceberpagamento.
+        FIND pessoas WHERE pessoa.idpessoa = contasreceber.idPessoaFornecedor.
+        FIND geralpessoas OF pessoas.
         
         CREATE ttcaixaebancos.
         ttcaixaebancos.cbdtPagamento = ttcontasreceberpagamento.dtPagamento.
@@ -191,6 +204,8 @@ FOR EACH contasreceberpagamento WHERE
         ttcaixaebancos.cbvalorPago = ttcontasreceberpagamento.valorPago.
         ttcaixaebancos.cbcategoria = contascategoria.nomeCategoria.
         ttcaixaebancos.cbportador = portador.nomePortador.
+        ttcaixaebancos.cbdocumento = contasreceber.documento.
+        ttcaixaebancos.cbnomePessoaFornecedor = geralpessoas.nomeFantasia.
         ttcaixaebancos.cbidentificador = "CR".
 END.
 
