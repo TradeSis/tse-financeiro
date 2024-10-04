@@ -10,7 +10,11 @@ include_once(__DIR__ . '/../database/portador.php');
 
 $pessoas = buscarPessoa();
 $contacategorias = buscaContaCategoria(null, "CP");
+if(isset($contacategorias['status']) == 400){
+    $contacategorias = null;
+}
 $portadores = buscaPortador();
+
 
 ?>
 
@@ -156,6 +160,9 @@ $portadores = buscaPortador();
                                 <div class="col-md">
                                     <label class="form-label ts-label">Fornecedor</label>
                                     <select class="form-select ts-input" name="idPessoaFornecedor" autocomplete="off" required>
+                                        <option value="<?php echo null ?>">
+                                            Selecione
+                                        </option>
                                         <?php
                                         foreach ($pessoas as $pessoa) {
                                         ?>
@@ -988,7 +995,8 @@ $portadores = buscaPortador();
                     $('#clonar_historico').val(data.historico);
                     $('#clonar_idCategoria').val(data.idCategoria);
                     $('#clonar_idPortador').val(data.idPortador);
-                    $('#clonar_valorOriginal').val(data.valorOriginal);
+                    valorOriginal = data.valorOriginal.toLocaleString('pt-br', {minimumFractionDigits: 2 });
+                    $('#clonar_valorOriginal').val(valorOriginal);
                     $('#clonar_vencimento').val(data.dtVencimento);
 
                     var texto = $("#tituloClonar");

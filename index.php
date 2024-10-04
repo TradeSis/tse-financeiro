@@ -66,6 +66,13 @@ if (
                         if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
+                                <?php if ($tab == "caixaebancos") {echo " active ";} ?>" 
+                                href="?tab=caixaebancos" role="tab">Caixa e Bancos</a>
+                            </li>
+                        <?php }
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
+                            <li class="nav-item mr-1 ">
+                                <a class="nav-link 
                                 <?php if ($tab == "dashboard") {echo " active ";} ?>" 
                                 href="?tab=dashboard" role="tab">Dashboard</a>
                             </li>
@@ -99,6 +106,10 @@ if (
                         <?php if ($getTab == "contaspagar") {echo " selected ";} ?>>Contas à Pagar</option>
                         <?php }
                         if ($_SESSION['nivelMenu'] >= 5) { ?>
+                            <option value="<?php echo URLROOT ?>/financeiro/?tab=caixaebancos" 
+                            <?php if ($getTab == "caixaebancos") {echo " selected ";} ?>>Caixa e Bancos</option>
+                        <?php }
+                        if ($_SESSION['nivelMenu'] >= 5) { ?>
                         <option value="<?php echo URLROOT ?>/financeiro/?tab=dashboard" 
                         <?php if ($getTab == "dashboard") {echo " selected ";} ?>>Dashboard</option>
                         <?php }
@@ -126,6 +137,10 @@ if (
             if ($tab == "contaspagar") {
                 $src = "consultas/contaspagar.php";
                 $title = "Financeiro/Contas à Pagar";
+            }
+            if ($tab == "caixaebancos") {
+                $src = "consultas/caixaebancos.php";
+                $title = "Financeiro/Caixa e Bancos";
             }
             if ($tab == "dashboard") {
                 $src = "consultas/dashboard.php";

@@ -35,8 +35,9 @@ $portadores = buscaPortador();
                 <button class="btn btn-outline-secondary ts-btnFiltros" type="button"><i class="bi bi-funnel"></i></button>
             </div>
 
-            <div class="col-2 col-lg-2 order-lg-2">
+            <div class="col-2 col-lg-2 order-lg-2" id="filtroh6">
                 <h2 class="ts-tituloPrincipal">Pagamentos</h2>
+                <h6 style="font-size: 10px;font-style:italic;text-align:left;"></h6>
             </div>
 
             <div class="col-2 col-lg-2 order-lg-2 mt-3">
@@ -162,6 +163,19 @@ $portadores = buscaPortador();
             }
 
             function buscar(buscarCpPagamento, idPortador, idCategoria, PeriodoInicio, PeriodoFim) {
+                var h6Element = $("#filtroh6 h6");
+                var text = "";
+
+                if (PeriodoInicio !== "") {
+                    text += formatDate(PeriodoInicio);
+
+                }
+
+                if (PeriodoFim !== "") {
+                    text += PeriodoFim !== null ? " até " + formatDate(PeriodoFim) : " ";
+                }
+
+                h6Element.html(text);
 
                 $.ajax({
                     type: 'POST',
